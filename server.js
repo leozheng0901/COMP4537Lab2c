@@ -72,12 +72,18 @@ class ServerApp {
 
   // Handles the /readFile endpoint by reading a file's contents
   handleReadFile(req, res, parsedURL) {
-    const filePath = "/tmp/file.txt"; // Use the temporary directory
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        return res.end(filePath + " 404 Not Found!");
-      }
-      return res.end(data);
+    const fileName = parsedURL.query["file"]; // Get the file name from query
+    if (!fileName) {
+      return res.end("Error: No file name provided!");
+    }
+
+    const filePath = `/tmp/${sanitizedFileName}`;
+
+    fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+            return res.end(`Error: File "${sanitizedFileName}" not found!`);
+        }
+        return res.end(data);
     });
   }
 }
