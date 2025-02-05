@@ -14,7 +14,6 @@ class ServerApp {
     this.server.listen(this.port, () => console.log(`Listening on ${this.port}...`));
   }
 
-
   // Main request handler that routes to specific methods
   handleRequest(req, res) {
     res.writeHead(200, {
@@ -54,9 +53,6 @@ class ServerApp {
       </form>
       <form action="/readFile" method="GET">
         <fieldset>
-          <legend>${this.language.readLabel}</legend>
-          <input type="text" name="file" id="file" placeholder="${this.language.readMessage}" />
-          <label for="file">${this.language.readLabel}</label>
           <button type="submit">${this.language.readAction}</button>
         </fieldset>
       </form>
@@ -66,7 +62,7 @@ class ServerApp {
   // Handles the /writeFile endpoint by appending content to a file
   handleWriteFile(req, res, parsedURL) {
     const content = parsedURL.query["message"];
-    fs.appendFile("file.txt", content, (err) => {
+    fs.appendFile("/tmp/file.txt", content, (err) => {
       if (err) {
         return res.end("Uh oh error, not poggers");
       }
@@ -76,10 +72,10 @@ class ServerApp {
 
   // Handles the /readFile endpoint by reading a file's contents
   handleReadFile(req, res, parsedURL) {
-    const file = parsedURL.query["file"];
-    fs.readFile(file, (err, data) => {
+    const filePath = "/tmp/file.txt"; // Use the temporary directory
+    fs.readFile(filePath, (err, data) => {
       if (err) {
-        return res.end(file + " 404 Not Found!");
+        return res.end(filePath + " 404 Not Found!");
       }
       return res.end(data);
     });
