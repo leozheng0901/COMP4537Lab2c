@@ -76,20 +76,17 @@ class ServerApp {
     const fileName = parsedURL.query["file"]; // Get the file name from query
 
     if (!fileName) {
-        res.writeHead(400, { "Content-Type": "text/plain" });
         return res.end("Error: No file name provided!");
     }
 
     const filePath = `/tmp/${fileName}`;
 
     fs.readFile(filePath, "utf8", (err, data) => {
-        if (err) {
-            res.writeHead(404, { "Content-Type": "text/plain" });
-            return res.end(`Error 404: File "${fileName}" not found!`);
-        }
+      if (err) {
+        return res.end(`Error 404: File "${fileName}" not found!`);
+      }
 
-        res.writeHead(200, { "Content-Type": "text/plain" });
-        return res.end(data);
+      return res.end(data);
     });
   }
 }
