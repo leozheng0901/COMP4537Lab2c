@@ -53,7 +53,7 @@ class ServerApp {
       </form>
       <form action="/readFile" method="GET">
         <fieldset>
-          <input type="text" name="message" id="message" placeholder="${this.language.readMessage}" />
+          <input type="text" name="file" id="file" placeholder="${this.language.readMessage}" />
           <button type="submit">${this.language.readAction}</button>
         </fieldset>
       </form>
