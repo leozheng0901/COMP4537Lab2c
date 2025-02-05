@@ -53,6 +53,7 @@ class ServerApp {
       </form>
       <form action="/readFile" method="GET">
         <fieldset>
+          <input type="text" name="message" id="message" placeholder="${this.language.readMessage}" />
           <button type="submit">${this.language.readAction}</button>
         </fieldset>
       </form>
@@ -73,16 +74,21 @@ class ServerApp {
   // Handles the /readFile endpoint by reading a file's contents
   handleReadFile(req, res, parsedURL) {
     const fileName = parsedURL.query["file"]; // Get the file name from query
+
     if (!fileName) {
-      return res.end("Error: No file name provided!");
+        res.writeHead(400, { "Content-Type": "text/plain" });
+        return res.end("Error: No file name provided!");
     }
 
-    const filePath = `/tmp/${sanitizedFileName}`;
+    const filePath = `/tmp/${fileName}`;
 
     fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
-            return res.end(`Error: File "${sanitizedFileName}" not found!`);
+            res.writeHead(404, { "Content-Type": "text/plain" });
+            return res.end(`Error 404: File "${fileName}" not found!`);
         }
+
+        res.writeHead(200, { "Content-Type": "text/plain" });
         return res.end(data);
     });
   }
